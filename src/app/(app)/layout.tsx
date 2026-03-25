@@ -1,41 +1,43 @@
-import Link from 'next/link'; // Importe o Link do Next.js
-import { ReactNode } from 'react';
+'use client';
 
-interface AppLayoutProps {
-  children: ReactNode;
-}
+import { useState } from 'react';
+import { Sidebar } from '@/components/layout/Sidebar';
+import { Header } from '@/components/layout/Header';
+import { MobileNav } from '@/components/layout/MobileNav';
 
-export default function AppLayout({ children }: AppLayoutProps) {
+// Este layout é aplicado a todas as rotas dentro do grupo (app)
+// Ou seja: /, /colaboradores, /squads, /configuracoes, etc.
+export default function AppLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  // Estado para controlar a abertura/fechamento do menu mobile
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
-    <div className="flex h-screen">
-      {/* Sidebar */}
-      <aside className="w-64 bg-gray-900 text-white p-4">
-        <h2 className="text-lg font-bold mb-4">Menu</h2>
-        <nav className="space-y-2">
-          <Link href="/" className="block hover:text-blue-400 transition-colors">
-            Dashboard
-          </Link>
-          <Link href="/colaboradores" className="block hover:text-blue-400 transition-colors">
-            Colaboradores
-          </Link>
-          <Link href="/squads" className="block hover:text-blue-400 transition-colors">
-            Squads
-          </Link>
-          <Link href="/configuracoes" className="block hover:text-blue-400 transition-colors">
-            Configurações
-          </Link>
-        </nav>
-      </aside>
+    <div className="flex h-screen overflow-hidden">
+      {/* Sidebar - visível apenas em desktop */}
+      <div className="hidden lg:block">
+        <Sidebar />
+      </div>
 
       {/* Área de conteúdo principal */}
-      <main className="flex-1 overflow-auto bg-gray-100">
-        <header className="bg-white shadow-sm p-4">
-          <h1 className="text-xl font-semibold">Diretório de Colaboradores</h1>
-        </header>
-        <div className="p-6">
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Header com botão para abrir menu mobile */}
+        <Header onMenuClick={() => setIsMobileMenuOpen(true)} />
+        
+        {/* Conteúdo da página atual com rolagem independente */}
+        <main className="flex-1 overflow-y-auto bg-gray-50 p-6">
           {children}
-        </div>
-      </main>
+        </main>
+      </div>
+
+      {/* Menu mobile - aparece apenas quando isMobileMenuOpen é true */}
+      <MobileNav 
+        isOpen={isMobileMenuOpen} 
+        onClose={() => setIsMobileMenuOpen(false)} 
+      />
     </div>
   );
 }

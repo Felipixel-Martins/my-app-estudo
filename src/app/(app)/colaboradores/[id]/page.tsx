@@ -1,4 +1,3 @@
-// src/app/(app)/colaboradores/[id]/page.tsx
 import { colaboradores, getSquadByColaborador } from '@/lib/data';
 
 // Tipo correto para Next.js 16

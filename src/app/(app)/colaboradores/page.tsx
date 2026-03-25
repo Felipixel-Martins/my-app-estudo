@@ -1,4 +1,3 @@
-// src/app/(app)/colaboradores/page.tsx
 import Link from 'next/link';
 import { colaboradores, getSquadByColaborador } from '@/lib/data';
 
