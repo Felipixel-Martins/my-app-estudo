@@ -1,4 +1,3 @@
-// src/app/(app)/colaboradores/[id]/editar/page.tsx
 import { colaboradores } from '@/lib/data';
 
 interface EditarColaboradorPageProps {

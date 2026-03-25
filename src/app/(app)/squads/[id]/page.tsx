@@ -1,4 +1,3 @@
-// src/app/(app)/squads/[id]/page.tsx
 import { squads, getColaboradoresBySquad, getLiderDoSquad } from '@/lib/data';
 
 interface SquadDetailPageProps {
