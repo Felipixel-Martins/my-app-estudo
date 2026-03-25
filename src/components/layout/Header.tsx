@@ -10,6 +10,7 @@ const pageTitles: Record<string, string> = {
   '/colaboradores': 'Colaboradores',
   '/squads': 'Squads',
   '/configuracoes': 'Configurações',
+  '/relatorios': 'Relatórios',
 };
 
 // Função para determinar o título baseado na URL atual
