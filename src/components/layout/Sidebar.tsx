@@ -9,7 +9,8 @@ import {
   Group, 
   Settings,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  FileText
 } from 'lucide-react';
 
 // Definindo os itens de navegação
@@ -40,6 +41,11 @@ const navItems: NavItem[] = [
     href: '/configuracoes',
     label: 'Configurações',
     icon: <Settings className="w-5 h-5" />
+  },
+  {
+    href: '/relatorios',
+    label: 'Relatórios',
+    icon: <FileText className="w-5 h-5" />
   }
 ];
 

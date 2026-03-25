@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { X, LayoutDashboard, Users, Group, Settings } from 'lucide-react';
+import { X, LayoutDashboard, Users, Group, Settings, FileText } from 'lucide-react';
 
 // Interface para as props do componente
 interface MobileNavProps {
@@ -16,6 +16,7 @@ const navItems = [
   { href: '/colaboradores', label: 'Colaboradores', icon: Users },
   { href: '/squads', label: 'Squads', icon: Group },
   { href: '/configuracoes', label: 'Configurações', icon: Settings },
+  { href: '/relatorios', label: 'Relatórios', icon: FileText },
 ];
 
 export function MobileNav({ isOpen, onClose }: MobileNavProps) {
