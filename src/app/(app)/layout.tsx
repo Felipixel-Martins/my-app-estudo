@@ -18,7 +18,7 @@ export default function AppLayout({
   return (
     <div className="flex h-screen overflow-hidden">
       {/* Sidebar - visível apenas em desktop */}
-      <div className="hidden lg:block">
+      <div className="hidden h-full lg:block">
         <Sidebar />
       </div>
 

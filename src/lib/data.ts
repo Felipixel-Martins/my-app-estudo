@@ -140,14 +140,14 @@ export interface Colaborador {
       liderId: 4 // Roberto Alves
     },
     {
-      id: 1,
+      id: 4,
       nome: "Fênix",
       descricao: "Squad responsável pelo frontend da plataforma principal. Trabalhamos com React, Next.js e tecnologias modernas para criar interfaces incríveis.",
       stack: ["React", "Next.js", "TypeScript", "Tailwind CSS", "GraphQL"],
       liderId: 1 // Felipe Martins 
     },
     {
-      id: 4,
+      id: 5,
       nome: "Software",
       descricao: "Squad responsável pelo frontend da plataforma principal. Trabalhamos com React, Next.js e tecnologias modernas para criar interfaces incríveis.",
       stack: ["React", "Next.js", "TypeScript", "Tailwind CSS", "GraphQL"],

@@ -23,7 +23,7 @@ export default function ColaboradoresPage() {
       >
         <SearchInput 
           onSearch={setSearchTerm} 
-          placeholder="Buscar por nome ou cargo..."
+          placeholder="Buscar por nome ou cargo"
         />
       </PageTitle>
 

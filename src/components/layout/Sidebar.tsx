@@ -59,8 +59,7 @@ export function Sidebar() {
   return (
     <aside 
       className={`
-        bg-gray-900 text-white 
-        transition-all duration-300 ease-in-out
+        h-full shrink-0 bg-gray-900 text-white transition-all duration-300 ease-in-out
         ${isCollapsed ? 'w-16' : 'w-64'}
       `}
     >
