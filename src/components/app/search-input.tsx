@@ -4,17 +4,23 @@ import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
 
+
 interface SearchInputProps {
   onSearch: (value: string) => void;
   placeholder?: string;
+  value?: string;
 }
 
-export function SearchInput({ onSearch, placeholder = "Buscar..." }: SearchInputProps) {
-  const [value, setValue] = useState('');
+export function SearchInput({ onSearch, placeholder = "Buscar...", value: externalValue }: SearchInputProps) {
+  const [internalValue, setInternalValue] = useState(externalValue || '');
+
+  const value = externalValue !== undefined ? externalValue : internalValue;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    setValue(newValue);
+    if (externalValue === undefined) {
+      setInternalValue(newValue);
+    }
     onSearch(newValue);
   };
 
