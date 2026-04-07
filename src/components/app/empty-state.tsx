@@ -1,6 +1,5 @@
-import { Search, Users, FolderOpen, Filter, AlertCircle } from 'lucide-react';
+import { Search, Users, FolderOpen, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 interface EmptyStateProps {
   type: 'search' | 'colaboradores' | 'squads' | 'filters';
