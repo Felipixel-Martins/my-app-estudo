@@ -1,46 +1,62 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { PageTitle } from '@/components/app/page-title';
 import { SearchInput } from '@/components/app/search-input';
 import { ProfileCard } from '@/components/app/profile-card';
 import { EmptyState } from '@/components/app/empty-state';
+import { ErrorState } from '@/components/app/error-state';
 import { Filters } from '@/components/app/filters';
+import { SkeletonProfileCard } from '@/components/app/skeleton-profile-card';
 import { colaboradores } from '@/lib/data';
+import { Skeleton } from '@/components/ui/skeleton';
+
+// Definindo os estados possíveis
+type PageState = 'loading' | 'success' | 'empty' | 'error';
 
 export default function ColaboradoresPage() {
-  // Estados para busca e filtros
+  // Estados da página
+  const [pageState, setPageState] = useState<PageState>('loading');
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState<{
     status?: 'Ativo' | 'Ausente';
     senioridade?: 'Junior' | 'Pleno' | 'Senior';
   }>({});
+  const [errorMessage, setErrorMessage] = useState('');
 
-  // Função para atualizar um filtro específico
-  const handleFilterChange = (key: string, value: string | undefined) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
-  };
+  // Simular carregamento de dados (como se fosse uma API)
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setPageState('loading');
+        
+        // Simular delay de rede
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Simular possível erro (descomente para testar)
+        // throw new Error('Falha na conexão');
+        
+        setPageState('success');
+      } catch (error) {
+        setErrorMessage(error instanceof Error ? error.message : 'Erro desconhecido');
+        setPageState('error');
+      }
+    };
+    
+    loadData();
+  }, []);
 
-  // Função para limpar todos os filtros
-  const handleClearFilters = () => {
-    setFilters({});
-    setSearchTerm('');
-  };
-
-  // Filtrar colaboradores com base na busca e nos filtros
+  // Filtrar colaboradores
   const filteredColaboradores = useMemo(() => {
     return colaboradores.filter(colab => {
-      // Filtro por busca (nome ou cargo)
       const matchesSearch = 
         searchTerm === '' ||
         colab.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
         colab.cargo.toLowerCase().includes(searchTerm.toLowerCase());
 
-      // Filtro por status
       const matchesStatus = 
         !filters.status || colab.status === filters.status;
 
-      // Filtro por senioridade
       const matchesSenioridade = 
         !filters.senioridade || colab.senioridade === filters.senioridade;
 
@@ -48,12 +64,56 @@ export default function ColaboradoresPage() {
     });
   }, [searchTerm, filters]);
 
-  // Contagem de resultados
-  const resultadosCount = filteredColaboradores.length;
+  // Verificar se o estado deve ser 'empty' baseado nos dados
+  const effectiveState = pageState === 'success' && filteredColaboradores.length === 0 
+    ? 'empty' 
+    : pageState;
 
+  // Handlers
+  const handleFilterChange = (key: string, value: string | undefined) => {
+    setFilters(prev => ({ ...prev, [key]: value }));
+  };
+
+  const handleClearFilters = () => {
+    setFilters({});
+    setSearchTerm('');
+  };
+
+  const handleRetry = () => {
+    window.location.reload(); // Simples, em produção seria mais refinado
+  };
+
+  // Renderização baseada no estado
+  if (effectiveState === 'loading') {
+    return (
+      <div className="space-y-6">
+        <div>
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-4 w-64 mt-2" />
+        </div>
+        <Skeleton className="h-10 w-full" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <SkeletonProfileCard key={i} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (effectiveState === 'error') {
+    return (
+      <ErrorState 
+        title="Erro ao carregar colaboradores"
+        message={errorMessage}
+        onRetry={handleRetry}
+      />
+    );
+  }
+
+  // Estado success (pode ser com dados ou vazio)
   return (
     <div className="space-y-6">
-      {/* Cabeçalho com título e contagem */}
       <div className="flex items-center justify-between">
         <div>
           <PageTitle 
@@ -61,28 +121,27 @@ export default function ColaboradoresPage() {
             description="Gerencie todos os colaboradores da empresa"
           />
           <p className="text-sm text-muted-foreground mt-1">
-            {resultadosCount} colaborador{resultadosCount !== 1 ? 'es' : ''} encontrado{resultadosCount !== 1 ? 's' : ''}
+            {filteredColaboradores.length} colaborador{filteredColaboradores.length !== 1 ? 'es' : ''} encontrado{filteredColaboradores.length !== 1 ? 's' : ''}
           </p>
         </div>
       </div>
 
-      {/* Barra de busca */}
       <SearchInput 
         onSearch={setSearchTerm} 
         placeholder="Buscar por nome ou cargo..."
-        value={searchTerm}
       />
 
-      {/* Filtros */}
       <Filters 
         filters={filters}
         onFilterChange={handleFilterChange}
         onClearFilters={handleClearFilters}
       />
 
-      {/* Listagem de colaboradores */}
       {filteredColaboradores.length === 0 ? (
-        <EmptyState type="search" />
+        <EmptyState 
+          type={searchTerm || Object.keys(filters).length ? 'search' : 'colaboradores'}
+          onAction={handleClearFilters}
+        />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredColaboradores.map(colab => (
