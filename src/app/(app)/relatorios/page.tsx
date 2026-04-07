@@ -66,7 +66,7 @@ export default function RelatoriosPage() {
   return (
     <div className="space-y-8">
       <section className="rounded-3xl bg-slate-900 p-8 text-white shadow-lg">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
           <div className="max-w-2xl space-y-3">
             <span className="inline-flex rounded-full bg-white/10 px-3 py-1 text-sm font-medium text-slate-200">
               Visao geral da equipe
@@ -78,21 +78,21 @@ export default function RelatoriosPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <div className="rounded-2xl bg-white/10 p-4 backdrop-blur">
-              <p className="text-sm text-slate-300">Colaboradores</p>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 xl:w-[28rem] xl:flex-none">
+            <div className="min-w-0 rounded-2xl bg-white/10 p-4 backdrop-blur">
+              <p className="text-sm leading-5 text-slate-300">Colaboradores</p>
               <p className="mt-2 text-3xl font-semibold">{resumo.totalColaboradores}</p>
             </div>
-            <div className="rounded-2xl bg-white/10 p-4 backdrop-blur">
-              <p className="text-sm text-slate-300">Squads</p>
+            <div className="min-w-0 rounded-2xl bg-white/10 p-4 backdrop-blur">
+              <p className="text-sm leading-5 text-slate-300">Squads</p>
               <p className="mt-2 text-3xl font-semibold">{uniqueSquads.length}</p>
             </div>
-            <div className="rounded-2xl bg-white/10 p-4 backdrop-blur">
-              <p className="text-sm text-slate-300">Skills mapeadas</p>
+            <div className="min-w-0 rounded-2xl bg-white/10 p-4 backdrop-blur">
+              <p className="text-sm leading-5 text-slate-300">Skills mapeadas</p>
               <p className="mt-2 text-3xl font-semibold">{topSkills.length}</p>
             </div>
-            <div className="rounded-2xl bg-white/10 p-4 backdrop-blur">
-              <p className="text-sm text-slate-300">Presenca</p>
+            <div className="min-w-0 rounded-2xl bg-white/10 p-4 backdrop-blur">
+              <p className="text-sm leading-5 text-slate-300">Presenca</p>
               <p className="mt-2 text-3xl font-semibold">
                 {Math.round((resumo.colaboradoresAtivos / Math.max(resumo.totalColaboradores, 1)) * 100)}%
               </p>

@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { Menu, Bell, User } from 'lucide-react';
+import { Menu, Bell } from 'lucide-react';
 
 // Mapeamento de rotas para títulos
 // Quando a URL corresponde à chave, mostra o valor correspondente

@@ -11,15 +11,19 @@ export interface Colaborador {
     bio: string;
     skills: string[];
     githubUsername?: string; // opcional, para integração futura
+    localizacao?: string;
+    dataAdmissao?: string;
+    telefone?: string
   }
   
-  export interface Squad {
-    id: number;
-    nome: string;
-    descricao: string;
-    stack: string[];
-    liderId: number; // ID do colaborador que lidera
-  }
+export interface Squad {
+  id: number;
+  nome: string;
+  descricao: string;
+  stack: string[];
+  email?: string;
+  liderId: number; // ID do colaborador que lidera
+}
   
   // Dados de colaboradores
   export const colaboradores: Colaborador[] = [
@@ -34,7 +38,10 @@ export interface Colaborador {
       senioridade: "Pleno",
       bio: "Apaixonada por UI/UX e React. Trabalha para criar interfaces acessíveis e performáticas. Nos tempos livres, contribui para projetos open source.",
       skills: ["React", "TypeScript", "Tailwind CSS", "Figma", "Next.js"],
-      githubUsername: "anaclarasouza"
+      githubUsername: "anaclarasouza",
+      localizacao: "São Paulo, SP",
+      dataAdmissao: "15/03/2022",
+      telefone: "(11) 98765-4321",
     },
     {
       id: 2,
@@ -47,7 +54,10 @@ export interface Colaborador {
       senioridade: "Senior",
       bio: "Especialista em arquitetura de microsserviços e bancos de dados. Mentor de novos desenvolvedores.",
       skills: ["Node.js", "Python", "PostgreSQL", "AWS", "Docker"],
-      githubUsername: "carloseduardo"
+      githubUsername: "carloseduardo",
+      localizacao: "São Paulo, SP",
+      dataAdmissao: "15/03/2020",
+      telefone: "(11) 98765-1234",
     },
     {
       id: 3,
@@ -60,7 +70,10 @@ export interface Colaborador {
       senioridade: "Pleno",
       bio: "Designer focada em criar experiências intuitivas e centradas no usuário. Especialista em pesquisa e prototipagem.",
       skills: ["Figma", "User Research", "Prototyping", "Design System", "Adobe XD"],
-      githubUsername: "fernandaoliveira"
+      githubUsername: "fernandaoliveira",
+      localizacao: "Santa Catarina, SC",
+      dataAdmissao: "15/01/2022",
+      telefone: "(47) 98365-4321",
     },
     {
       id: 4,
@@ -73,7 +86,10 @@ export interface Colaborador {
       senioridade: "Senior",
       bio: "Automatiza tudo que é possível. Especialista em CI/CD, infraestrutura como código e monitoramento.",
       skills: ["Kubernetes", "Terraform", "Jenkins", "AWS", "Prometheus"],
-      githubUsername: "robertoalves"
+      githubUsername: "robertoalves",
+      localizacao: "Minas Gerais, MG",
+      dataAdmissao: "10/02/2022",
+      telefone: "(11) 98765-4321",
     },
     {
       id: 5,
@@ -86,7 +102,10 @@ export interface Colaborador {
       senioridade: "Pleno",
       bio: "Apaixonada por React Native e desenvolvimento mobile. Cria apps com foco em performance e experiência do usuário.",
       skills: ["React Native", "TypeScript", "Redux", "Firebase", "iOS", "Android"],
-      githubUsername: "julianacosta"
+      githubUsername: "julianacosta",
+      localizacao: "São Paulo, SP",
+      dataAdmissao: "15/03/2022",
+      telefone: "(11) 98765-4321",
     },
     {
       id: 6,
@@ -99,7 +118,10 @@ export interface Colaborador {
       senioridade: "Pleno",
       bio: "Apaixonado por Front-End e desenvolvimento mobile. Criar apps com foco em performance e experiência do usuário.",
       skills: ["React", "TypeScript",],
-      githubUsername: "Felipixel-Martins"
+      githubUsername: "Felipixel-Martins",
+      localizacao: "Santa Catarina, SC",
+      dataAdmissao: "15/03/2025",
+      telefone: "(47) 99755-2205",
     },
     {
       id: 7,
@@ -112,7 +134,10 @@ export interface Colaborador {
       senioridade: "Senior",
       bio: "Criar apps com foco em performance e experiência do usuário.",
       skills: ["React", "TypeScript"],
-      githubUsername: "mneis"
+      githubUsername: "mneis",
+      localizacao: "Santa Catarina, SC",
+      dataAdmissao: "05/03/2022",
+      telefone: "(47) 98765-4321",
     }
   ];
   
@@ -123,6 +148,7 @@ export interface Colaborador {
       nome: "Fênix",
       descricao: "Squad responsável pelo frontend da plataforma principal. Trabalhamos com React, Next.js e tecnologias modernas para criar interfaces incríveis.",
       stack: ["React", "Next.js", "TypeScript", "Tailwind CSS", "GraphQL"],
+      email: "fenix@empresa.com",
       liderId: 1 // Ana Clara Souza
     },
     {
@@ -130,6 +156,7 @@ export interface Colaborador {
       nome: "Orion",
       descricao: "Squad de backend e APIs. Construímos serviços robustos e escaláveis que alimentam toda a plataforma.",
       stack: ["Node.js", "Python", "PostgreSQL", "Redis", "RabbitMQ"],
+      email: "orion@empresa.com",
       liderId: 2 // Carlos Eduardo Lima
     },
     {
@@ -137,20 +164,23 @@ export interface Colaborador {
       nome: "Atlas",
       descricao: "Squad de infraestrutura e DevOps. Garantimos que tudo esteja funcionando com alta disponibilidade e performance.",
       stack: ["AWS", "Kubernetes", "Terraform", "Docker", "Prometheus"],
+      email: "atlas@empresa.com",
       liderId: 4 // Roberto Alves
     },
     {
       id: 4,
-      nome: "Fênix",
-      descricao: "Squad responsável pelo frontend da plataforma principal. Trabalhamos com React, Next.js e tecnologias modernas para criar interfaces incríveis.",
-      stack: ["React", "Next.js", "TypeScript", "Tailwind CSS", "GraphQL"],
-      liderId: 1 // Felipe Martins 
+      nome: "Aurora",
+      descricao: "Squad focado em experiência mobile e iniciativas cross-platform. Trabalhamos na evolução dos aplicativos e integrações com serviços da plataforma.",
+      stack: ["React Native", "TypeScript", "Expo", "Firebase", "Node.js"],
+      email: "aurora@empresa.com",
+      liderId: 6 // Felipe Martins
     },
     {
       id: 5,
-      nome: "Software",
-      descricao: "Squad responsável pelo frontend da plataforma principal. Trabalhamos com React, Next.js e tecnologias modernas para criar interfaces incríveis.",
-      stack: ["React", "Next.js", "TypeScript", "Tailwind CSS", "GraphQL"],
+      nome: "Nebula",
+      descricao: "Squad de engenharia de plataforma e produtividade. Atua com arquitetura, qualidade e aceleracao do desenvolvimento interno.",
+      stack: ["TypeScript", "Node.js", "CI/CD", "Observabilidade", "Arquitetura"],
+      email: "nebula@empresa.com",
       liderId: 7 // Matheus
     }
   ];

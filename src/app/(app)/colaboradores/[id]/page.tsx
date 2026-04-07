@@ -1,6 +1,23 @@
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { StatusBadge } from '@/components/app/status-badge';
+import { SkillsList } from '@/components/app/skills-list';
+import { InfoSection } from '@/components/app/info-section';
 import { colaboradores, getSquadByColaborador } from '@/lib/data';
+import { 
+  ArrowLeft, 
+  Edit, 
+  Mail, 
+  MapPin, 
+  Briefcase, 
+  GraduationCap,
+  Users,
+  Code2
+} from 'lucide-react';
 
-// Tipo correto para Next.js 16
 interface ColaboradorDetailPageProps {
   params: Promise<{
     id: string;
@@ -8,109 +25,214 @@ interface ColaboradorDetailPageProps {
 }
 
 export default async function ColaboradorDetailPage({ params }: ColaboradorDetailPageProps) {
-  // No Next.js 15+, params é uma Promise - precisamos dar await
   const { id } = await params;
-  
-  // Converte id para número e busca o colaborador
   const colaboradorId = parseInt(id);
+  
+  // Buscar colaborador
   const colaborador = colaboradores.find(c => c.id === colaboradorId);
   
-  // Tratamento de caso não encontrado
+  // Se não encontrar, mostrar página 404
   if (!colaborador) {
-    return (
-      <div className="text-center py-12">
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">
-          Colaborador não encontrado
-        </h1>
-        <p className="text-gray-600">
-          Não encontramos um colaborador com o ID {id}.
-        </p>
-      </div>
-    );
+    notFound();
   }
   
+  // Buscar squad relacionado
   const squad = getSquadByColaborador(colaborador.id);
   
+  // Pegar iniciais para fallback do avatar
+  const initials = colaborador.nome
+    .split(' ')
+    .map(n => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+
   return (
-    <div>
-      {/* Cabeçalho com botão de voltar */}
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">
-          Detalhes do Colaborador
-        </h1>
-        <a 
-          href="/colaboradores" 
-          className="text-blue-600 hover:text-blue-800"
-        >
-          ← Voltar para listagem
-        </a>
-      </div>
-      
-      {/* Card principal do colaborador */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="p-6">
-          <div className="flex items-start gap-6">
-            {/* Avatar */}
-            <img 
-              src={colaborador.avatarUrl} 
-              alt={colaborador.nome}
-              className="w-32 h-32 rounded-full object-cover"
-            />
-            
-            {/* Informações básicas */}
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-2">
-                <h2 className="text-2xl font-bold">{colaborador.nome}</h2>
-                <span className={`px-2 py-1 rounded-full text-sm ${
-                  colaborador.status === 'Ativo' 
-                    ? 'bg-green-100 text-green-800' 
-                    : 'bg-gray-100 text-gray-800'
-                }`}>
-                  {colaborador.status}
-                </span>
-              </div>
-              
-              <p className="text-gray-600 mb-2">{colaborador.cargo}</p>
-              
-              <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
-                <span>📧 {colaborador.email}</span>
-                <span>⭐ {colaborador.senioridade}</span>
-                {squad && <span>👥 Squad: {squad.nome}</span>}
-              </div>
-              
-              <div className="border-t pt-4 mt-2">
-                <h3 className="font-semibold mb-2">Sobre</h3>
-                <p className="text-gray-700">{colaborador.bio}</p>
-              </div>
-            </div>
-          </div>
+    <div className="space-y-6">
+      {/* Botão voltar */}
+      <Link 
+        href="/colaboradores" 
+        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Voltar para colaboradores
+      </Link>
+
+      {/* Cabeçalho do perfil */}
+      <div className="bg-white rounded-lg border p-6">
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* Avatar */}
+          <Avatar className="h-24 w-24 md:h-32 md:w-32">
+            <AvatarImage src={colaborador.avatarUrl} alt={colaborador.nome} />
+            <AvatarFallback className="text-2xl">{initials}</AvatarFallback>
+          </Avatar>
           
-          {/* Skills */}
-          <div className="mt-6 border-t pt-4">
-            <h3 className="font-semibold mb-3">Skills</h3>
-            <div className="flex flex-wrap gap-2">
-              {colaborador.skills.map((skill, index) => (
-                <span 
-                  key={index}
-                  className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
-                >
-                  {skill}
-                </span>
-              ))}
+          {/* Informações principais */}
+          <div className="flex-1">
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-3 flex-wrap">
+                  <h1 className="text-2xl md:text-3xl font-bold">{colaborador.nome}</h1>
+                  <StatusBadge status={colaborador.status} />
+                </div>
+                <p className="text-lg text-muted-foreground mt-1">{colaborador.cargo}</p>
+                
+                <div className="flex flex-wrap gap-3 mt-3">
+                  {squad && (
+                    <Link 
+                      href={`/squads/${squad.id}`}
+                      className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+                    >
+                      <Users className="h-4 w-4" />
+                      Squad: {squad.nome}
+                    </Link>
+                  )}
+                  <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
+                    <Briefcase className="h-4 w-4" />
+                    {colaborador.senioridade}
+                  </span>
+                </div>
+              </div>
+              
+              {/* Botão de edição */}
+              <Link href={`/colaboradores/${colaborador.id}/editar`}>
+                <Button variant="outline" className="gap-2">
+                  <Edit className="h-4 w-4" />
+                  Editar
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
-        
-        {/* Botão de edição */}
-        <div className="bg-gray-50 px-6 py-4 border-t">
-          <a 
-            href={`/colaboradores/${colaborador.id}/editar`}
-            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-          >
-            Editar Colaborador
-          </a>
-        </div>
       </div>
+
+      {/* Abas para organizar informações */}
+      <Tabs defaultValue="overview" className="space-y-4">
+        <TabsList className="grid w-full max-w-md grid-cols-3">
+          <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+          <TabsTrigger value="skills">Skills</TabsTrigger>
+          <TabsTrigger value="contact">Contato</TabsTrigger>
+        </TabsList>
+        
+        {/* Aba: Visão Geral */}
+        <TabsContent value="overview" className="space-y-4">
+          <InfoSection 
+            title="Sobre" 
+            icon={<GraduationCap className="h-4 w-4" />}
+          >
+            <p className="text-muted-foreground leading-relaxed">
+              {colaborador.bio}
+            </p>
+          </InfoSection>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <InfoSection 
+              title="Informações Profissionais" 
+              icon={<Briefcase className="h-4 w-4" />}
+            >
+              <dl className="space-y-3">
+                <div>
+                  <dt className="text-sm font-medium text-muted-foreground">Cargo</dt>
+                  <dd className="text-sm mt-0.5">{colaborador.cargo}</dd>
+                </div>
+                <div>
+                  <dt className="text-sm font-medium text-muted-foreground">Senioridade</dt>
+                  <dd className="text-sm mt-0.5">{colaborador.senioridade}</dd>
+                </div>
+                <div>
+                  <dt className="text-sm font-medium text-muted-foreground">Squad</dt>
+                  <dd className="text-sm mt-0.5">
+                    {squad ? (
+                      <Link href={`/squads/${squad.id}`} className="text-primary hover:underline">
+                        {squad.nome}
+                      </Link>
+                    ) : (
+                      <span className="text-muted-foreground">Não alocado</span>
+                    )}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-sm font-medium text-muted-foreground">Status</dt>
+                  <dd className="text-sm mt-0.5">
+                    <StatusBadge status={colaborador.status} />
+                  </dd>
+                </div>
+              </dl>
+            </InfoSection>
+            
+            <InfoSection 
+              title="Localização" 
+              icon={<MapPin className="h-4 w-4" />}
+            >
+              <dl className="space-y-3">
+                <div>
+                  <dt className="text-sm font-medium text-muted-foreground">Localização</dt>
+                  <dd className="text-sm mt-0.5">
+                    {colaborador.localizacao || 'Não informada'}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-sm font-medium text-muted-foreground">Data de Admissão</dt>
+                  <dd className="text-sm mt-0.5">
+                    {colaborador.dataAdmissao || 'Não informada'}
+                  </dd>
+                </div>
+              </dl>
+            </InfoSection>
+          </div>
+        </TabsContent>
+        
+        {/* Aba: Skills */}
+        <TabsContent value="skills">
+          <InfoSection 
+            title="Competências Técnicas" 
+            icon={<Code2 className="h-4 w-4" />}
+          >
+            <SkillsList skills={colaborador.skills} />
+          </InfoSection>
+        </TabsContent>
+        
+        {/* Aba: Contato */}
+        <TabsContent value="contact">
+          <InfoSection 
+            title="Informações de Contato" 
+            icon={<Mail className="h-4 w-4" />}
+          >
+            <dl className="space-y-4">
+              <div>
+                <dt className="text-sm font-medium text-muted-foreground">E-mail Corporativo</dt>
+                <dd className="text-sm mt-0.5 flex items-center gap-2">
+                  <Mail className="h-4 w-4 text-muted-foreground" />
+                  <a href={`mailto:${colaborador.email}`} className="text-primary hover:underline">
+                    {colaborador.email}
+                  </a>
+                </dd>
+              </div>
+              {colaborador.telefone && (
+                <div>
+                  <dt className="text-sm font-medium text-muted-foreground">Telefone</dt>
+                  <dd className="text-sm mt-0.5">{colaborador.telefone}</dd>
+                </div>
+              )}
+              {colaborador.githubUsername && (
+                <div>
+                  <dt className="text-sm font-medium text-muted-foreground">GitHub</dt>
+                  <dd className="text-sm mt-0.5">
+                    <a 
+                      href={`https://github.com/${colaborador.githubUsername}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline"
+                    >
+                      @{colaborador.githubUsername}
+                    </a>
+                  </dd>
+                </div>
+              )}
+            </dl>
+          </InfoSection>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

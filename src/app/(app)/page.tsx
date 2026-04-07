@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { getResumoEstatisticas, colaboradores, squads } from '@/lib/data';
-import { Users, Group, UserCheck, UserX, TrendingUp, Calendar } from 'lucide-react';
+import { getResumoEstatisticas, colaboradores } from '@/lib/data';
+import { Users, Group, UserCheck, UserX } from 'lucide-react';
 import Link from 'next/link';
 
 export default function DashboardPage() {
