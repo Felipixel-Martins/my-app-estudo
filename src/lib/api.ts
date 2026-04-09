@@ -3,23 +3,9 @@ import type { ColaboradorFormData } from '@/lib/schemas/colaborador-schema';
 
 const STORAGE_KEY = 'colaboradores-overrides';
 
-type StoredColaborador = Colaborador;
+export type ColaboradorDetail = Colaborador;
 
-function normalizeColaborador(colaborador: Colaborador): ColaboradorFormData {
-  return {
-    nome: colaborador.nome,
-    cargo: colaborador.cargo,
-    squadId: String(colaborador.squadId ?? ''),
-    senioridade: colaborador.senioridade,
-    localizacao: colaborador.localizacao ?? '',
-    bio: colaborador.bio ?? '',
-    skills: colaborador.skills,
-    status: colaborador.status,
-    githubUsername: colaborador.githubUsername ?? '',
-  };
-}
-
-function getStoredOverrides(): Record<string, StoredColaborador> {
+function getStoredOverrides(): Record<string, Colaborador> {
   if (typeof window === 'undefined') {
     return {};
   }
@@ -31,13 +17,13 @@ function getStoredOverrides(): Record<string, StoredColaborador> {
   }
 
   try {
-    return JSON.parse(raw) as Record<string, StoredColaborador>;
+    return JSON.parse(raw) as Record<string, Colaborador>;
   } catch {
     return {};
   }
 }
 
-function saveStoredOverrides(overrides: Record<string, StoredColaborador>) {
+function saveStoredOverrides(overrides: Record<string, Colaborador>) {
   if (typeof window === 'undefined') {
     return;
   }
@@ -55,7 +41,7 @@ function getBaseColaboradorById(id: string) {
   return colaboradores.find((colaborador) => colaborador.id === colaboradorId);
 }
 
-export async function getColaboradorById(id: string): Promise<ColaboradorFormData | null> {
+function getResolvedColaborador(id: string): Colaborador | null {
   const baseColaborador = getBaseColaboradorById(id);
 
   if (!baseColaborador) {
@@ -63,9 +49,38 @@ export async function getColaboradorById(id: string): Promise<ColaboradorFormDat
   }
 
   const overrides = getStoredOverrides();
-  const colaborador = overrides[id] ?? baseColaborador;
 
-  return normalizeColaborador(colaborador);
+  return overrides[id] ?? baseColaborador;
+}
+
+function normalizeColaboradorToFormData(colaborador: Colaborador): ColaboradorFormData {
+  return {
+    nome: colaborador.nome,
+    cargo: colaborador.cargo,
+    squadId: String(colaborador.squadId ?? ''),
+    senioridade: colaborador.senioridade,
+    localizacao: colaborador.localizacao ?? '',
+    bio: colaborador.bio ?? '',
+    skills: colaborador.skills,
+    status: colaborador.status,
+    githubUsername: colaborador.githubUsername ?? '',
+  };
+}
+
+export async function getColaboradorById(id: string): Promise<ColaboradorDetail | null> {
+  return getResolvedColaborador(id);
+}
+
+export async function getColaboradorFormDataById(
+  id: string
+): Promise<ColaboradorFormData | null> {
+  const colaborador = getResolvedColaborador(id);
+
+  if (!colaborador) {
+    return null;
+  }
+
+  return normalizeColaboradorToFormData(colaborador);
 }
 
 export async function updateColaborador(id: string, data: ColaboradorFormData): Promise<void> {
@@ -77,7 +92,6 @@ export async function updateColaborador(id: string, data: ColaboradorFormData): 
 
   const squadId = Number(data.squadId);
   const squadExists = squads.some((squad) => squad.id === squadId);
-
   const overrides = getStoredOverrides();
 
   overrides[id] = {

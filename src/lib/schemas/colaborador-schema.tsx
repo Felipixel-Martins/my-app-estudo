@@ -34,3 +34,10 @@ export const colaboradorSchema = z.object({
 });
 
 export type ColaboradorFormData = z.infer<typeof colaboradorSchema>;
+
+// Schema para validação específica do GitHub (para uso no formulário)
+export const githubUsernameSchema = z.string()
+  .optional()
+  .refine(val => !val || /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i.test(val), {
+    message: 'Username do GitHub inválido'
+  });

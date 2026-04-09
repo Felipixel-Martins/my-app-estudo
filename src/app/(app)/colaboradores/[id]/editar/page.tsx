@@ -7,7 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { getColaboradorById, updateColaborador } from '@/lib/api';
+import { getColaboradorFormDataById, updateColaborador } from '@/lib/api';
 import { ColaboradorFormData } from '@/lib/schemas/colaborador-schema';
 
 export default function EditarColaboradorPage() {
@@ -26,7 +26,7 @@ export default function EditarColaboradorPage() {
         // Simula delay
         await new Promise(resolve => setTimeout(resolve, 1000));
         
-        const data = await getColaboradorById(id);
+        const data = await getColaboradorFormDataById(id);
         
         if (!data) {
           setStatus('not-found');
